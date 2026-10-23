@@ -48,6 +48,10 @@ public class ProductService {
         return new ProductResponseDTO(productCurrent);
     }
 
+    public void delete(Long id) {
+        productRepository.deleteById(id);
+    }
+
     private void updateData(Product productCurrent, ProductRequestDTO requestDTO) {
         productCurrent.setName(requestDTO.getNome());
         productCurrent.setDescription(requestDTO.getDescription());
