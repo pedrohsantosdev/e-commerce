@@ -4,6 +4,9 @@ import com.example.ecommerce.dto.ProductRequestDTO;
 import com.example.ecommerce.dto.ProductResponseDTO;
 import com.example.ecommerce.entities.Product;
 import com.example.ecommerce.repositories.ProductRepository;
+import com.example.ecommerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductResponseDTO findById(Long id) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         return new ProductResponseDTO(product);
     }
 
@@ -42,14 +45,22 @@ public class ProductService {
 
     @Transactional
     public ProductResponseDTO update(Long id, ProductRequestDTO requestDTO) {
-        Product productCurrent = productRepository.getReferenceById(id);
-        updateData(productCurrent, requestDTO);
-        productRepository.save(productCurrent);
-        return new ProductResponseDTO(productCurrent);
+        try {
+            Product productCurrent = productRepository.getReferenceById(id);
+            updateData(productCurrent, requestDTO);
+            productRepository.save(productCurrent);
+            return new ProductResponseDTO(productCurrent);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        if(!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException(id);
+        }
+            productRepository.deleteById(id);
     }
 
     private void updateData(Product productCurrent, ProductRequestDTO requestDTO) {

@@ -1,6 +1,6 @@
 package com.example.ecommerce.entities;
 
-import com.example.ecommerce.entities.PK.OrdemItemPK;
+import com.example.ecommerce.entities.pk.OrdemItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

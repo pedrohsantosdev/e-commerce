@@ -2,7 +2,6 @@ package com.example.ecommerce.controllers;
 
 import com.example.ecommerce.dto.ProductRequestDTO;
 import com.example.ecommerce.dto.ProductResponseDTO;
-import com.example.ecommerce.entities.Product;
 import com.example.ecommerce.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

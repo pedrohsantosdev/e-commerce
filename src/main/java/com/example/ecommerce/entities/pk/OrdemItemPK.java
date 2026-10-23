@@ -1,4 +1,4 @@
-package com.example.ecommerce.entities.PK;
+package com.example.ecommerce.entities.pk;
 
 import com.example.ecommerce.entities.Order;
 import com.example.ecommerce.entities.Product;
