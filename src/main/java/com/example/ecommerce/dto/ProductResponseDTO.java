@@ -2,7 +2,7 @@ package com.example.ecommerce.dto;
 
 import com.example.ecommerce.entities.Product;
 
-public class ProductDTO {
+public class ProductResponseDTO {
 
     private Long id;
     private String name;
@@ -10,10 +10,10 @@ public class ProductDTO {
     private Double price;
     private String imgUrl;
 
-    public ProductDTO() {
+    public ProductResponseDTO() {
     }
 
-    public ProductDTO(Product product) {
+    public ProductResponseDTO(Product product) {
         id = product.getId();
         name = product.getName();
         description = product.getDescription();

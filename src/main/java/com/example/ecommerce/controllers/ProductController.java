@@ -1,14 +1,16 @@
 package com.example.ecommerce.controllers;
 
-import com.example.ecommerce.dto.ProductDTO;
+import com.example.ecommerce.dto.ProductRequestDTO;
+import com.example.ecommerce.dto.ProductResponseDTO;
+import com.example.ecommerce.entities.Product;
 import com.example.ecommerce.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/products")
@@ -21,15 +23,24 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
-        Page<ProductDTO> dtos = productService.findAll(pageable);
+    public ResponseEntity<Page<ProductResponseDTO>> findAll(Pageable pageable) {
+        Page<ProductResponseDTO> dtos = productService.findAll(pageable);
         return ResponseEntity.ok().body(dtos);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        ProductDTO dto = productService.findById(id);
+    public ResponseEntity<ProductResponseDTO> findById(@PathVariable Long id) {
+        ProductResponseDTO dto = productService.findById(id);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @PostMapping
+    public ResponseEntity<ProductResponseDTO> insert(@RequestBody ProductRequestDTO requestDTO) {
+        ProductResponseDTO dto = productService.insert(requestDTO);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(dto);
     }
 
 }
