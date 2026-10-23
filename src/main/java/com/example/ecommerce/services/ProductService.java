@@ -1,7 +1,7 @@
 package com.example.ecommerce.services;
 
-import com.example.ecommerce.dto.ProductResponseDTO;
 import com.example.ecommerce.dto.ProductRequestDTO;
+import com.example.ecommerce.dto.ProductResponseDTO;
 import com.example.ecommerce.entities.Product;
 import com.example.ecommerce.repositories.ProductRepository;
 import org.springframework.data.domain.Page;
@@ -38,5 +38,20 @@ public class ProductService {
         product = productRepository.save(product);
 
         return new ProductResponseDTO(product);
+    }
+
+    @Transactional
+    public ProductResponseDTO update(Long id, ProductRequestDTO requestDTO) {
+        Product productCurrent = productRepository.getReferenceById(id);
+        updateData(productCurrent, requestDTO);
+        productRepository.save(productCurrent);
+        return new ProductResponseDTO(productCurrent);
+    }
+
+    private void updateData(Product productCurrent, ProductRequestDTO requestDTO) {
+        productCurrent.setName(requestDTO.getNome());
+        productCurrent.setDescription(requestDTO.getDescription());
+        productCurrent.setPrice(requestDTO.getPrice());
+        productCurrent.setImgUrl(requestDTO.getImgUrl());
     }
 }
